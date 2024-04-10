@@ -1,0 +1,7 @@
+:8000 {
+	root ./craftinginterpreters.com
+	file_server {
+		# make sure to set the index to the contents of the book as opposed to the index.html page
+		index contents.html
+	}
+}

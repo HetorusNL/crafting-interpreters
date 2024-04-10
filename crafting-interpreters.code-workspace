@@ -1,0 +1,31 @@
+{
+  "folders": [
+    {
+      "path": "."
+    }
+  ],
+  "settings": {
+    "C_Cpp.errorSquiggles": "enabled",
+    "cmake.sourceDirectory": ["${workspaceFolder}/src/c/craftinginterpreters"],
+    "cmake.buildDirectory": "${sourceDirectory}/build",
+    "editor.rulers": [120],
+    "editor.formatOnSave": true,
+    "files.insertFinalNewline": true,
+    "files.trimFinalNewlines": true,
+    "java.format.settings.url": "eclipse-formatter.xml",
+    "python.analysis.typeCheckingMode": "basic",
+    "xml.format.maxLineWidth": 150
+  },
+  "extensions": {
+    "recommendations": [
+      "esbenp.prettier-vscode",
+      "matthewpi.caddyfile-support",
+      "ms-python.python",
+      "ms-python.black-formatter",
+      "ms-vscode.cpptools-extension-pack",
+      "pkief.material-icon-theme",
+      "redhat.vscode-xml",
+      "vscjava.vscode-java-pack"
+    ]
+  }
+}
