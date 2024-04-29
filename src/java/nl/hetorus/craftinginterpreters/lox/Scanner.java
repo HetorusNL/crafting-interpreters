@@ -80,23 +80,9 @@ class Scanner {
                 break;
             case '/':
                 if (match('/')) {
-                    // a comment goes until the end of the line
-                    while (peek() != '\n' && !isAtEnd())
-                        advance();
+                    lineComment();
                 } else if (match('*')) {
-                    while (!(peek() == '*' && peekNext() == '/') && !isAtEnd()) {
-                        if (peek() == '\n')
-                            line++;
-                        advance();
-                    }
-                    if (isAtEnd()) {
-                        Lox.error(line, "Unterminated block comment.");
-                        break;
-                    }
-                    if (!isAtEnd())
-                        advance(); // consume the closing '*'
-                    if (!isAtEnd())
-                        advance(); // consume the closing '/'
+                    blockComment();
                 } else {
                     addToken(SLASH);
                 }
@@ -138,6 +124,28 @@ class Scanner {
             type = IDENTIFIER;
 
         addToken(type);
+    }
+
+    private void blockComment() {
+        while (!(peek() == '*' && peekNext() == '/') && !isAtEnd()) {
+            if (peek() == '\n')
+                line++;
+            advance();
+        }
+        if (isAtEnd()) {
+            Lox.error(line, "Unterminated block comment.");
+            return;
+        }
+        if (!isAtEnd())
+            advance(); // consume the closing '*'
+        if (!isAtEnd())
+            advance(); // consume the closing '/'
+    }
+
+    private void lineComment() {
+        // a comment goes until the end of the line
+        while (peek() != '\n' && !isAtEnd())
+            advance();
     }
 
     private void number() {
