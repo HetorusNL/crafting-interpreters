@@ -27,5 +27,37 @@
       "redhat.vscode-xml",
       "vscjava.vscode-java-pack"
     ]
+  },
+  "launch": {
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "type": "java",
+        "name": "Current File",
+        "request": "launch",
+        "mainClass": "${file}"
+      },
+      {
+        "type": "java",
+        "name": "Lox with arguments",
+        "request": "launch",
+        "mainClass": "nl.hetorus.craftinginterpreters.lox.Lox",
+        "args": "${command:SpecifyProgramArgs}"
+      },
+      {
+        "type": "java",
+        "name": "HelloWorld",
+        "request": "launch",
+        "mainClass": "nl.hetorus.craftinginterpreters.HelloWorld",
+        "projectName": "crafting-interpreters_2c8613b3"
+      },
+      {
+        "type": "java",
+        "name": "Lox",
+        "request": "launch",
+        "mainClass": "nl.hetorus.craftinginterpreters.lox.Lox",
+        "projectName": "crafting-interpreters_2c8613b3"
+      }
+    ]
   }
 }

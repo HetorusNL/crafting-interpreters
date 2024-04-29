@@ -20,7 +20,7 @@ sudo pacman -S caddy less xdg-utils
 
 ## TODO
 
-- continue after `I.1`
+- continue after `4.`
 - add separate projects for the challenges already?
 
 ## FAQ

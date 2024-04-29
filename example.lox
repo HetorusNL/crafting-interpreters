@@ -1,0 +1,12 @@
+var i = 1337;
+var s = "this is an example string";
+
+i == s;  // this is comment next to a test for equality
+
+/* this is an example block comment */
+
+/* this block comment
+ * has multiple
+ * lines */
+
+ /* this is an unterminated comment block
