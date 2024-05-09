@@ -1,12 +1,17 @@
-var i = 1337;
-var s = "this is an example string";
+// below is an expression we're currently able to parse and print
+-123 * (45.67)
 
-i == s;  // this is comment next to a test for equality
-
-/* this is an example block comment */
-
-/* this block comment
- * has multiple
- * lines */
-
- /* this is an unterminated comment block
+// below lox code is, unfortunatelly, still too advanced for our interpreter..
+//
+// var i = 1337;
+// var s = "this is an example string";
+//
+// i == s;  // this is comment next to a test for equality
+//
+// /* this is an example block comment */
+//
+// /* this block comment
+//  * has multiple
+//  * lines */
+//
+//  /* this is an unterminated comment block

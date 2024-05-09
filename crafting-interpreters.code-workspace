@@ -47,12 +47,6 @@
       },
       {
         "type": "java",
-        "name": "AstPrinter",
-        "request": "launch",
-        "mainClass": "nl.hetorus.craftinginterpreters.lox.AstPrinter"
-      },
-      {
-        "type": "java",
         "name": "Lox REPL",
         "request": "launch",
         "mainClass": "nl.hetorus.craftinginterpreters.lox.Lox",
