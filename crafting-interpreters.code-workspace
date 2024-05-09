@@ -33,12 +33,6 @@
     "configurations": [
       {
         "type": "java",
-        "name": "Current File",
-        "request": "launch",
-        "mainClass": "${file}"
-      },
-      {
-        "type": "java",
         "name": "Lox with arguments",
         "request": "launch",
         "mainClass": "nl.hetorus.craftinginterpreters.lox.Lox",
@@ -59,14 +53,7 @@
       },
       {
         "type": "java",
-        "name": "HelloWorld",
-        "request": "launch",
-        "mainClass": "nl.hetorus.craftinginterpreters.HelloWorld",
-        "projectName": "crafting-interpreters_2c8613b3"
-      },
-      {
-        "type": "java",
-        "name": "Lox",
+        "name": "Lox REPL",
         "request": "launch",
         "mainClass": "nl.hetorus.craftinginterpreters.lox.Lox",
         "projectName": "crafting-interpreters_2c8613b3"
