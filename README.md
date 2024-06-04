@@ -15,13 +15,13 @@ Challenges will be implemented in a copy of the interpreters as created accordin
 Perform the following to install the dependencies of this repository (assuming an Arch Linux installation):
 
 ```bash
-sudo pacman -S caddy less xdg-utils
+sudo pacman -S caddy jdk-openjdk less xdg-utils
 ```
 
 ## TODO
 
-- continue after `4.`
-- add separate projects for the challenges already?
+- continue from `7.3`
+- after the Java/C interpreters, add Python one with (all?) the challenges implemented
 
 ## FAQ
 
