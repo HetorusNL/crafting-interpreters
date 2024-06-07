@@ -1,17 +1,44 @@
 // below is an expression we're currently able to parse and print
--123 * (45.67)
+-123 * (45.67);
 
-// below lox code is, unfortunatelly, still too advanced for our interpreter..
-//
-// var i = 1337;
-// var s = "this is an example string";
-//
-// i == s;  // this is comment next to a test for equality
-//
-// /* this is an example block comment */
-//
-// /* this block comment
-//  * has multiple
-//  * lines */
-//
-//  /* this is an unterminated comment block
+// we can also do print statements now
+print "one";
+print true;
+print 1000 + 300 + 30 + 7;
+
+// we can also declare, assign and use variables now
+var i = 1;
+i = 1337;
+var s = "this is an example string";
+print i;
+print s;
+
+print i == s;  // this is comment next to a test for equality
+
+/* this is an example block comment */
+
+/* this block comment
+ * has multiple
+ * lines */
+// /* this is an unterminated comment block causing an error when uncommented
+
+print "";
+var a = "global a";
+var b = "global b";
+var c = "global c";
+{
+    var a = "outer a";
+    var b = "outer b";
+    {
+        var a = "inner a";
+        print a;
+        print b;
+        print c;
+    }
+    print a;
+    print b;
+    print c;
+}
+print a;
+print b;
+print c;
