@@ -94,11 +94,41 @@ counter();  // "2"
 print "";
 var a = "global";
 {
-  fun showA() {
-    print a;
-  }
+    fun showA() {
+        print a;
+    }
 
-  showA();
-  var a = "block";
-  showA();
+    showA();
+    var a = "block";
+    showA();
 }
+
+// test that we can parse and execute classes
+print "";
+class DevonshireCream {
+    serveOn() {
+        return "Scones";
+    }
+}
+print DevonshireCream; // should print "DevonshireCream"
+// test that we can create class instances
+class Bagel {}
+var bagel = Bagel();
+print bagel;  // should print "Bagel instance"
+// test that we can call methods of class instances
+class Bacon {
+    eat() {
+        print "Crunch crunch crunch!";
+    }
+}
+Bacon().eat();  // should print "Crunch crunch crunch!"
+// test that we have this in methods of instances
+class Cake {
+    taste() {
+        var adjective = "delicious";
+        print "The " + this.flavor + " cake is " + adjective + "!";
+    }
+}
+var cake = Cake();
+cake.flavor = "German chocolate";
+cake.taste();  // should print "The German chocolate cake is delicious"
