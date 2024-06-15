@@ -88,3 +88,17 @@ fun makeCounter() {
 var counter = makeCounter();
 counter();  // "1"
 counter();  // "2"
+
+// test that we've fixed scoping and variable resolution
+// this should print "global" both times, and not "block"
+print "";
+var a = "global";
+{
+  fun showA() {
+    print a;
+  }
+
+  showA();
+  var a = "block";
+  showA();
+}
