@@ -20,7 +20,7 @@ sudo pacman -S caddy jdk-openjdk less xdg-utils
 
 ## TODO
 
-- continue from `7.3`
+- continue from `III. A Bytecode Virtual Machine - 14.`
 - after the Java/C interpreters, add Python one with (all?) the challenges implemented
 
 ## FAQ

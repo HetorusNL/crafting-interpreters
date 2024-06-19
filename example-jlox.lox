@@ -1,0 +1,16 @@
+class JLox {
+    status() {
+        return "ready!";
+    }
+}
+class TAPL < JLox {
+    status() {
+        return "'initial preparation halfway!'";
+    }
+
+    print_status() {
+        print "status of jlox is: " + super.status();
+        print "status of TAPL is: " + this.status();
+    }
+}
+TAPL().print_status();

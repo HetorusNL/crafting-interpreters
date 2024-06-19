@@ -132,3 +132,18 @@ class Cake {
 var cake = Cake();
 cake.flavor = "German chocolate";
 cake.taste();  // should print "The German chocolate cake is delicious"
+
+// test inheritance
+print "";
+class Doughnut {
+    cook() {
+        print "Fry until golden brown.";
+    }
+}
+class BostonCream < Doughnut {
+    cook() {
+        super.cook();
+        print "Pipe full of custard and coat with chocolate.";
+    }
+}
+BostonCream().cook();
