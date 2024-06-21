@@ -10,5 +10,14 @@ add_compile_options(-Wno-unused-parameter)
 
 # add the main files to the executable
 add_executable(crafting-interpreters-c
-    main.c
+    src/chunk.c
+    src/debug.c
+    src/main.c
+    src/memory.c
+    src/value.c
+)
+
+# add the include directories for the target executable
+target_include_directories(crafting-interpreters-c PRIVATE
+    ${CMAKE_SOURCE_DIR}
 )

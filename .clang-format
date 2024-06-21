@@ -13,3 +13,4 @@ IndentCaseBlocks: true
 ColumnLimit: 120
 AlignConsecutiveDeclarations: false
 AlwaysBreakTemplateDeclarations: Yes
+AlignEscapedNewlines: DontAlign
