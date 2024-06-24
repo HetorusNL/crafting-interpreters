@@ -15,6 +15,7 @@ add_executable(crafting-interpreters-c
     src/main.c
     src/memory.c
     src/value.c
+    src/vm.c
 )
 
 # add the include directories for the target executable

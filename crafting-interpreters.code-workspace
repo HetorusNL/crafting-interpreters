@@ -5,6 +5,7 @@
     }
   ],
   "settings": {
+    "C_Cpp.autoAddFileAssociations": false,
     "C_Cpp.errorSquiggles": "enabled",
     "cmake.sourceDirectory": ["${workspaceFolder}/src/c/craftinginterpreters"],
     "cmake.buildDirectory": "${sourceDirectory}/build",
