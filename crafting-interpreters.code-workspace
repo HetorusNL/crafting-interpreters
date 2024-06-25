@@ -34,24 +34,65 @@
     "configurations": [
       {
         "type": "java",
-        "name": "Lox with arguments",
+        "name": "JLox with arguments",
         "request": "launch",
         "mainClass": "nl.hetorus.craftinginterpreters.lox.Lox",
         "args": "${command:SpecifyProgramArgs}"
       },
       {
         "type": "java",
-        "name": "GenerateAst with arguments",
+        "name": "JLox GenerateAst with arguments",
         "request": "launch",
         "mainClass": "nl.hetorus.craftinginterpreters.tools.GenerateAst",
         "args": "${command:SpecifyProgramArgs}"
       },
       {
         "type": "java",
-        "name": "Lox REPL",
+        "name": "JLox REPL",
         "request": "launch",
         "mainClass": "nl.hetorus.craftinginterpreters.lox.Lox",
         "projectName": "crafting-interpreters_2c8613b3"
+      },
+      {
+        "name": "Clox with arguments",
+        "type": "cppdbg",
+        "request": "launch",
+        "program": "${command:cmake.launchTargetPath}",
+        "args": ["test-clox.lox"],
+        "cwd": "${workspaceFolder}",
+        "environment": [
+          {
+            "name": "PATH",
+            "value": "${env:PATH}:${command:cmake.getLaunchTargetDirectory}"
+          }
+        ],
+        "setupCommands": [
+          {
+            "description": "Enable pretty-printing for gdb",
+            "text": "-enable-pretty-printing",
+            "ignoreFailures": true
+          }
+        ]
+      },
+      {
+        "name": "Clox REPL",
+        "type": "cppdbg",
+        "request": "launch",
+        "program": "${command:cmake.launchTargetPath}",
+        "cwd": "${workspaceFolder}",
+        "environment": [
+          {
+            "name": "PATH",
+            "value": "${env:PATH}:${command:cmake.getLaunchTargetDirectory}"
+          }
+        ],
+        "setupCommands": [
+          {
+            "description": "Enable pretty-printing for gdb",
+            "text": "-enable-pretty-printing",
+            "ignoreFailures": true
+          }
+        ]
       }
     ]
   }

@@ -11,9 +11,11 @@ add_compile_options(-Wno-unused-parameter)
 # add the main files to the executable
 add_executable(crafting-interpreters-c
     src/chunk.c
+    src/compiler.c
     src/debug.c
     src/main.c
     src/memory.c
+    src/scanner.c
     src/value.c
     src/vm.c
 )
