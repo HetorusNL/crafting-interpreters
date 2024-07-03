@@ -13,6 +13,8 @@ typedef struct Scanner {
 
 Scanner scanner;
 
+Token skip_whitespace_error_token;
+
 void init_scanner(const char* source) {
     scanner.start = source;
     scanner.current = source;
@@ -65,7 +67,8 @@ static Token error_token(const char* message) {
     return token;
 }
 
-static Token* skip_whitespace() {
+// returns true when it fills the `skip_whitespace_error_token`
+static bool skip_whitespace() {
     for (;;) {
         char c = peek();
         switch (c) {
@@ -93,23 +96,20 @@ static Token* skip_whitespace() {
                         scanner.line++;
                     }
                     if (is_at_end()) {
-                        // create a token to pass the error to the scan_token function
-                        Token token = error_token("Unterminated block comment.");
-                        // some magic to return a pointer to a persistent token
-                        Token* p_token = (Token*)malloc(sizeof(Token));
-                        *p_token = token;
-                        return p_token;
+                        // use the error token to pass the error to the scan_token function
+                        skip_whitespace_error_token = error_token("Unterminated block comment.");
+                        return true;
                     }
                 }
                 // advance the '*' and '/'
                 advance();
                 advance();
             } else {
-                return NULL;
+                return false;
             }
             break;
         default:
-            return NULL;
+            return false;
         }
     }
 }
@@ -208,13 +208,10 @@ static Token string() {
 }
 
 Token scan_token() {
-    Token* p_token = skip_whitespace();
-    if (p_token) {
-        // convert the p_token pointer back to a Token object and free the memory
-        Token token = *p_token;
-        free((char*)p_token);
-        return token;
-    }
+    bool has_error = skip_whitespace();
+    if (has_error)
+        return skip_whitespace_error_token;
+
     scanner.start = scanner.current;
 
     if (is_at_end())
