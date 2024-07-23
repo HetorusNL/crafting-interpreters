@@ -1,9 +1,12 @@
 #include <stdarg.h>
 #include <stdio.h>
+#include <string.h>
 
 #include <src/common.h>
 #include <src/compiler.h>
 #include <src/debug.h>
+#include <src/memory.h>
+#include <src/object.h>
 #include <src/vm.h>
 
 VM vm;
@@ -23,9 +26,12 @@ static void runtime_error(const char* format, ...) {
     reset_stack();
 }
 
-void init_vm() { reset_stack(); }
+void init_vm() {
+    reset_stack();
+    vm.objects = NULL;
+}
 
-void free_vm() {}
+void free_vm() { free_objects(); }
 
 static inline uint8_t read_byte() { return *vm.ip++; }
 static inline Value read_constant() { return vm.chunk->constants.values[read_byte()]; }
@@ -33,6 +39,20 @@ static inline Value read_constant() { return vm.chunk->constants.values[read_byt
 static Value peek(int distance) { return vm.stack_top[-1 - distance]; }
 
 static bool is_falsey(Value value) { return IS_NIL(value) || (IS_BOOL(value) && !AS_BOOL(value)); }
+
+static void concatenate() {
+    ObjString* b = AS_STRING(pop());
+    ObjString* a = AS_STRING(pop());
+
+    int length = a->length + b->length;
+    char* chars = ALLOCATE(char, length + 1);
+    memcpy(chars, a->chars, (size_t)a->length);
+    memcpy(chars + a->length, b->chars, (size_t)b->length);
+    chars[length] = '\0';
+
+    ObjString* result = take_string(chars, length);
+    push(OBJ_VAL(result));
+}
 
 InterpretResult run() {
 #define BINARY_OP(value_type, op) \
@@ -89,7 +109,16 @@ InterpretResult run() {
             BINARY_OP(BOOL_VAL, <);
             break;
         case OP_ADD:
-            BINARY_OP(NUMBER_VAL, +);
+            if (IS_STRING(peek(0)) && IS_STRING(peek(1))) {
+                concatenate();
+            } else if (IS_NUMBER(peek(0)) && IS_NUMBER(peek(1))) {
+                double b = AS_NUMBER(pop());
+                double a = AS_NUMBER(pop());
+                push(NUMBER_VAL(a + b));
+            } else {
+                runtime_error("Operands must be two numbers or two strings.");
+                return INTERPRET_RUNTIME_ERROR;
+            }
             break;
         case OP_SUBTRACT:
             BINARY_OP(NUMBER_VAL, -);

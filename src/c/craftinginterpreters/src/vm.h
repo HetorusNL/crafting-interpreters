@@ -10,7 +10,10 @@ typedef struct VM {
     uint8_t* ip;
     Value stack[STACK_MAX];
     Value* stack_top;
+    Obj* objects;
 } VM;
+
+extern VM vm;
 
 typedef enum InterpretResult {
     INTERPRET_OK,
