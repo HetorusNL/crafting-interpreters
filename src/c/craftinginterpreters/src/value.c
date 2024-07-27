@@ -44,13 +44,6 @@ void print_value(Value value) {
     }
 }
 
-static inline bool obj_string_equal(Value a, Value b) {
-    ObjString* string_a = AS_STRING(a);
-    ObjString* string_b = AS_STRING(b);
-    return string_a->length == string_b->length &&
-           memcmp(string_a->chars, string_b->chars, (size_t)string_a->length) == 0;
-}
-
 bool values_equal(Value a, Value b) {
     if (a.type != b.type)
         return false;
@@ -62,7 +55,7 @@ bool values_equal(Value a, Value b) {
     case VAL_NUMBER:
         return AS_NUMBER(a) == AS_NUMBER(b);
     case VAL_OBJ:
-        return obj_string_equal(a, b);
+        return AS_OBJ(a) == AS_OBJ(b);
     default:
         // unreachable
         return false;
