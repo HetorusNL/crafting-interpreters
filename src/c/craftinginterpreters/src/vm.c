@@ -29,16 +29,19 @@ static void runtime_error(const char* format, ...) {
 void init_vm() {
     reset_stack();
     vm.objects = NULL;
+    init_table(&vm.globals);
     init_table(&vm.strings);
 }
 
 void free_vm() {
+    free_table(&vm.globals);
     free_table(&vm.strings);
     free_objects();
 }
 
 static inline uint8_t read_byte() { return *vm.ip++; }
 static inline Value read_constant() { return vm.chunk->constants.values[read_byte()]; }
+static inline ObjString* read_string() { return AS_STRING(read_constant()); }
 
 static Value peek(int distance) { return vm.stack_top[-1 - distance]; }
 
@@ -96,6 +99,37 @@ InterpretResult run() {
         case OP_FALSE:
             push(BOOL_VAL(false));
             break;
+        case OP_POP:
+            pop();
+            break;
+        case OP_GET_GLOBAL:
+            {
+                ObjString* name = read_string();
+                Value value;
+                if (!table_get(&vm.globals, name, &value)) {
+                    runtime_error("Undefined variable '%s'.", name->chars);
+                    return INTERPRET_RUNTIME_ERROR;
+                }
+                push(value);
+                break;
+            }
+        case OP_DEFINE_GLOBAL:
+            {
+                ObjString* name = read_string();
+                table_set(&vm.globals, name, peek(0));
+                pop();
+                break;
+            }
+        case OP_SET_GLOBAL:
+            {
+                ObjString* name = read_string();
+                if (table_set(&vm.globals, name, peek(0))) {
+                    table_delete(&vm.globals, name);
+                    runtime_error("Undefined variable '%s'.", name->chars);
+                    return INTERPRET_RUNTIME_ERROR;
+                }
+                break;
+            }
         case OP_EQUAL:
             push(BOOL_VAL(values_equal(pop(), pop())));
             break;
@@ -136,9 +170,12 @@ InterpretResult run() {
         case OP_NOT:
             push(BOOL_VAL(is_falsey(pop())));
             break;
-        case OP_RETURN:
+        case OP_PRINT:
             print_value(pop());
             printf("\n");
+            break;
+        case OP_RETURN:
+            // exit the interpreter
             return INTERPRET_OK;
         }
     }

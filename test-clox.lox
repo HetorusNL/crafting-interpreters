@@ -1,2 +1,6 @@
-// !(5 - 4 > 3 * 2 == !nil)
-"this " + "is "+ "a " + "test string"
+print !(5 - 4 > 3 * 2 == !nil);
+print "this " + "is "+ "a " + "test string";
+var a = 1000;
+var b = a + 300;
+b = b + 37;
+print b;
