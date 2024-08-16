@@ -26,3 +26,34 @@ var a = 1;
 }
 print "global scope:";
 print a;
+
+print "before if-else";
+if (1337 > 0) {
+    print "1337 is > 0!";
+} else {
+    print "1337 is NOT > 0!";
+}
+print "after if-else";
+
+var a = 1 or 2;
+print a;
+a = false or 3;
+print a;
+a = false or false;
+print a;
+var b = 1 and 2;
+print b;
+b = 1 and false;
+print b;
+b = false and false;
+print b;
+
+var l = 10;
+while(l > 0) {
+    print l;
+    l = l - 1;
+}
+
+for(var i=0; i<10; i=i+2) {
+    print i;
+}
