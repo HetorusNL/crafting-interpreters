@@ -4,3 +4,25 @@ var a = 1000;
 var b = a + 300;
 b = b + 37;
 print b;
+
+var a = 1;
+{
+    print "outer scope before assigning:";
+    print a;
+    var a = 1337;
+    print "outer scope after assigning:";
+    print a;
+    {
+        print "inner scope before assigning:";
+        print a;
+        var b = a;
+        var a = b + 1;
+        print "inner scope after assigning:";
+        print b;
+        print a;
+    }
+    print "outer scope:";
+    print a;
+}
+print "global scope:";
+print a;

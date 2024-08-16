@@ -102,6 +102,9 @@ InterpretResult run() {
         case OP_POP:
             pop();
             break;
+        case OP_GET_LOCAL:
+            push(vm.stack[read_byte()]);
+            break;
         case OP_GET_GLOBAL:
             {
                 ObjString* name = read_string();
@@ -120,6 +123,9 @@ InterpretResult run() {
                 pop();
                 break;
             }
+        case OP_SET_LOCAL:
+            vm.stack[read_byte()] = peek(0);
+            break;
         case OP_SET_GLOBAL:
             {
                 ObjString* name = read_string();

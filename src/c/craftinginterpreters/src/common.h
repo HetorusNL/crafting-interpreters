@@ -8,3 +8,5 @@
 #define DEBUG_PRINT_CODE
 // if defined, prints the disassembled instruction before executing it
 #define DEBUG_TRACE_EXECUTION
+
+#define UINT8_COUNT (UINT8_MAX + 1)
