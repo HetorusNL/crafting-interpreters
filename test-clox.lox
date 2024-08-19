@@ -57,3 +57,28 @@ while(l > 0) {
 for(var i=0; i<10; i=i+2) {
     print i;
 }
+
+fun test_function() {
+    print "woo we're inside a function!";
+}
+print test_function;
+test_function();
+
+fun sum(a, b, c) {
+    return a + b + c;
+}
+
+print sum(1, 2, 3);
+
+fun fib(n) {
+    if (n < 2)
+        return n;
+    return fib(n - 2) + fib (n - 1);
+}
+
+var start = clock();
+for (var i = 0; i <= 20; i = i + 1) {
+    // uncomment to calculate fib
+    // print fib(i);
+}
+print clock() - start;
