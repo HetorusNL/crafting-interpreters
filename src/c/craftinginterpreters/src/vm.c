@@ -51,7 +51,14 @@ static void define_native(const char* name, NativeFn function) {
 
 void init_vm() {
     reset_stack();
+    vm.bytes_allocated = 0;
+    vm.next_gc = 1024 * 1024;
     vm.objects = NULL;
+
+    vm.gray_count = 0;
+    vm.gray_capacity = 0;
+    vm.gray_stack = NULL;
+
     init_table(&vm.globals);
     init_table(&vm.strings);
 
@@ -148,8 +155,8 @@ static void close_upvalue(Value* last) {
 static bool is_falsey(Value value) { return IS_NIL(value) || (IS_BOOL(value) && !AS_BOOL(value)); }
 
 static void concatenate() {
-    ObjString* b = AS_STRING(pop());
-    ObjString* a = AS_STRING(pop());
+    ObjString* b = AS_STRING(peek(0));
+    ObjString* a = AS_STRING(peek(1));
 
     int length = a->length + b->length;
     char* chars = ALLOCATE(char, length + 1);
@@ -158,6 +165,8 @@ static void concatenate() {
     chars[length] = '\0';
 
     ObjString* result = take_string(chars, length);
+    pop();
+    pop();
     push(OBJ_VAL(result));
 }
 
