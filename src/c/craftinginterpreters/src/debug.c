@@ -1,6 +1,7 @@
 #include <stdio.h>
 
 #include <src/debug.h>
+#include <src/object.h>
 #include <src/value.h>
 
 void disassemble_chunk(Chunk* chunk, const char* name) {
@@ -36,6 +37,23 @@ static int jump_instruction(const char* name, int sign, Chunk* chunk, int offset
     return offset + 3;
 }
 
+static int closure_instruction(const char* name, Chunk* chunk, int offset) {
+    offset++;
+    uint8_t constant = chunk->code[offset++];
+    printf("%-16s %4d ", name, constant);
+    print_value(chunk->constants.values[constant]);
+    printf("\n");
+
+    ObjFunction* function = AS_FUNCTION(chunk->constants.values[constant]);
+    for (int i = 0; i < function->upvalue_count; i++) {
+        int is_local = chunk->code[offset++];
+        int index = chunk->code[offset++];
+        printf("%04d      |                     %s %d\n", offset - 2, is_local ? "local" : "upvalue", index);
+    }
+
+    return offset;
+}
+
 int disassemble_instruction(Chunk* chunk, int offset) {
     printf("%04d ", offset);
     if (offset > 0 && chunk->lines[offset] == chunk->lines[offset - 1])
@@ -57,14 +75,18 @@ int disassemble_instruction(Chunk* chunk, int offset) {
         return simple_instruction("OP_POP", offset);
     case OP_GET_LOCAL:
         return byte_instruction("OP_GET_LOCAL", chunk, offset);
-    case OP_GET_GLOBAL:
-        return constant_instruction("OP_GET_GLOBAL", chunk, offset);
-    case OP_DEFINE_GLOBAL:
-        return constant_instruction("OP_DEFINE_GLOBAL", chunk, offset);
     case OP_SET_LOCAL:
         return byte_instruction("OP_SET_LOCAL", chunk, offset);
+    case OP_DEFINE_GLOBAL:
+        return constant_instruction("OP_DEFINE_GLOBAL", chunk, offset);
+    case OP_GET_GLOBAL:
+        return constant_instruction("OP_GET_GLOBAL", chunk, offset);
     case OP_SET_GLOBAL:
         return constant_instruction("OP_SET_GLOBAL", chunk, offset);
+    case OP_GET_UPVALUE:
+        return byte_instruction("OP_GET_UPVALUE", chunk, offset);
+    case OP_SET_UPVALUE:
+        return byte_instruction("OP_SET_UPVALUE", chunk, offset);
     case OP_EQUAL:
         return simple_instruction("OP_EQUAL", offset);
     case OP_GREATER:
@@ -93,6 +115,10 @@ int disassemble_instruction(Chunk* chunk, int offset) {
         return jump_instruction("OP_LOOP", -1, chunk, offset);
     case OP_CALL:
         return byte_instruction("OP_CALL", chunk, offset);
+    case OP_CLOSURE:
+        return closure_instruction("OP_CLOSURE", chunk, offset);
+    case OP_CLOSE_UPVALUE:
+        return simple_instruction("OP_CLOSE_UPVALUE", offset);
     case OP_RETURN:
         return simple_instruction("OP_RETURN", offset);
     default:

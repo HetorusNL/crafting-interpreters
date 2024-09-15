@@ -82,3 +82,27 @@ for (var i = 0; i <= 20; i = i + 1) {
     // print fib(i);
 }
 print clock() - start;
+
+
+// closures test
+var x = "global";
+fun outer() {
+    var x = "outer";
+    fun inner() {
+        print x;
+    }
+    inner();
+}
+outer();
+
+fun outer() {
+  var x = "outside";
+  fun inner() {
+    print x;
+  }
+
+  return inner;
+}
+
+var closure = outer();
+closure();
