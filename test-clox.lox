@@ -106,3 +106,13 @@ fun outer() {
 
 var closure = outer();
 closure();
+
+class Klass {}
+print Klass;
+print Klass();
+
+class Pair {}
+var pair = Pair();
+pair.first = 1300;
+pair.second = 37;
+print pair.first + pair.second;  // 1337

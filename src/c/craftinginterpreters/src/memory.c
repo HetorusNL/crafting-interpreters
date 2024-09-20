@@ -77,6 +77,11 @@ void mark_array(ValueArray* array) {
         mark_value(array->values[i]);
 }
 
+static void blacken_instance(ObjInstance* instance) {
+    mark_object((Obj*)instance->klass);
+    mark_table(&instance->fields);
+}
+
 static void blacken_function(ObjFunction* function) {
     mark_object((Obj*)function->name);
     mark_array(&function->chunk.constants);
@@ -87,6 +92,8 @@ static void blacken_closure(ObjClosure* closure) {
     for (int i = 0; i < closure->upvalue_count; i++)
         mark_object((Obj*)closure->upvalues[i]);
 }
+
+static void blacken_class(ObjClass* class) { mark_object((Obj*)class->name); }
 
 static void blacken_object(Obj* object) {
 #ifdef DEBUG_LOG_GC
@@ -102,14 +109,22 @@ static void blacken_object(Obj* object) {
     case OBJ_UPVALUE:
         mark_value(((ObjUpvalue*)object)->closed);
         break;
+    case OBJ_INSTANCE:
+        blacken_instance((ObjInstance*)object);
+        break;
     case OBJ_FUNCTION:
         blacken_function((ObjFunction*)object);
         break;
     case OBJ_CLOSURE:
         blacken_closure((ObjClosure*)object);
         break;
+    case OBJ_CLASS:
+        blacken_class((ObjClass*)object);
+        break;
     }
 }
+
+static void free_class(Obj* object) { FREE(ObjClass, object); }
 
 static void free_closure(Obj* object) {
     ObjClosure* closure = (ObjClosure*)object;
@@ -121,6 +136,12 @@ static void free_function(Obj* object) {
     ObjFunction* function = (ObjFunction*)object;
     free_chunk(&function->chunk);
     FREE(ObjFunction, object);
+}
+
+static void free_instance(Obj* object) {
+    ObjInstance* instance = (ObjInstance*)object;
+    free_table(&instance->fields);
+    FREE(OBJ_INSTANCE, object);
 }
 
 static void free_string(Obj* object) {
@@ -135,11 +156,17 @@ static void free_object(Obj* object) {
 #endif
 
     switch (object->type) {
+    case OBJ_CLASS:
+        free_class(object);
+        break;
     case OBJ_CLOSURE:
         free_closure(object);
         break;
     case OBJ_FUNCTION:
         free_function(object);
+        break;
+    case OBJ_INSTANCE:
+        free_instance(object);
         break;
     case OBJ_NATIVE:
         FREE(ObjNative, object);
