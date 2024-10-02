@@ -93,7 +93,15 @@ static void blacken_closure(ObjClosure* closure) {
         mark_object((Obj*)closure->upvalues[i]);
 }
 
-static void blacken_class(ObjClass* class) { mark_object((Obj*)class->name); }
+static void blacken_class(ObjClass* class) {
+    mark_object((Obj*)class->name);
+    mark_table(&class->methods);
+}
+
+static void blacken_bound_method(ObjBoundMethod* bound) {
+    mark_value(bound->receiver);
+    mark_object((Obj*)bound->method);
+}
 
 static void blacken_object(Obj* object) {
 #ifdef DEBUG_LOG_GC
@@ -121,10 +129,17 @@ static void blacken_object(Obj* object) {
     case OBJ_CLASS:
         blacken_class((ObjClass*)object);
         break;
+    case OBJ_BOUND_METHOD:
+        blacken_bound_method((ObjBoundMethod*)object);
+        break;
     }
 }
 
-static void free_class(Obj* object) { FREE(ObjClass, object); }
+static void free_class(Obj* object) {
+    ObjClass* klass = (ObjClass*)object;
+    free_table(&klass->methods);
+    FREE(ObjClass, object);
+}
 
 static void free_closure(Obj* object) {
     ObjClosure* closure = (ObjClosure*)object;
@@ -156,6 +171,9 @@ static void free_object(Obj* object) {
 #endif
 
     switch (object->type) {
+    case OBJ_BOUND_METHOD:
+        FREE(ObjBoundMethod, object);
+        break;
     case OBJ_CLASS:
         free_class(object);
         break;
@@ -192,6 +210,7 @@ static void mark_roots() {
 
     mark_table(&vm.globals);
     mark_compiler_roots();
+    mark_object((Obj*)vm.init_string);
 }
 
 static void trace_references() {
