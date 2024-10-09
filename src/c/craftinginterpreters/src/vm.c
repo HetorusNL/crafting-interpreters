@@ -360,6 +360,16 @@ InterpretResult run() {
                 push(value);          // field value
                 break;
             }
+        case OP_GET_SUPER:
+            {
+                ObjString* name = read_string();
+                ObjClass* superclass = AS_CLASS(pop());
+
+                if (!bind_method(superclass, name))
+                    return INTERPRET_RUNTIME_ERROR;
+
+                break;
+            }
         case OP_EQUAL:
             push(BOOL_VAL(values_equal(pop(), pop())));
             break;
@@ -442,6 +452,16 @@ InterpretResult run() {
                 frame = &vm.frames[vm.frame_count - 1];
                 break;
             }
+        case OP_SUPER_INVOKE:
+            {
+                ObjString* method = read_string();
+                int arg_count = read_byte();
+                ObjClass* superclass = AS_CLASS(pop());
+                if (!invoke_from_class(superclass, method, arg_count))
+                    return INTERPRET_RUNTIME_ERROR;
+                frame = &vm.frames[vm.frame_count - 1];
+                break;
+            }
         case OP_CLOSURE:
             {
                 ObjFunction* function = AS_FUNCTION(read_constant());
@@ -479,6 +499,19 @@ InterpretResult run() {
         case OP_CLASS:
             push(OBJ_VAL(new_class(read_string())));
             break;
+        case OP_INHERIT:
+            {
+                Value superclass = peek(1);
+                if (!IS_CLASS(superclass)) {
+                    runtime_error("Superclass must be a class.");
+                    return INTERPRET_RUNTIME_ERROR;
+                }
+
+                ObjClass* subclass = AS_CLASS(peek(0));
+                table_add_all(&AS_CLASS(superclass)->methods, &subclass->methods);
+                pop();  // subclass
+                break;
+            }
         case OP_METHOD:
             define_method(read_string());
             break;
