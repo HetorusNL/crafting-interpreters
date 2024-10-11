@@ -18,10 +18,19 @@ Perform the following to install the dependencies of this repository (assuming a
 sudo pacman -S caddy jdk-openjdk less xdg-utils
 ```
 
-## TODO
+## Profiling
 
-- continue from `III. A Bytecode Virtual Machine - 14.`
-- after the Java/C interpreters, add Python one with (all?) the challenges implemented
+Run callgrind (tool of valgrind) on the executable like:
+
+```bash
+valgrind --tool=callgrind src/c/craftinginterpreters/build/crafting-interpreters-c benchmark.lox
+```
+
+Then run kcachegrind on the resulting callgrind output (callgrind adds the PID value of the command to the output file name, so substituting '\*' with that):
+
+```bash
+kcachegrind callgrind.out.*
+```
 
 ## FAQ
 

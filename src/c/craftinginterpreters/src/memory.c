@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <stdlib.h>
 
 #include <src/compiler.h>
@@ -6,8 +7,6 @@
 #include <src/vm.h>
 
 #ifdef DEBUG_LOG_GC
-#include <stdio.h>
-
 #include <src/debug.h>
 #endif
 

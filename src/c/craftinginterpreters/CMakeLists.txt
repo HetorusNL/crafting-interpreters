@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.25)
 project(crafting-interpreters-c VERSION 0.1.0)
 
 # add some default compile options
-add_compile_options(-g3 -fmessage-length=0)
+add_compile_options(-g3 -O3 -fmessage-length=0)
 # add several warnings and make them errors
 add_compile_options(-Wall -Werror -Wimplicit-fallthrough -Wpedantic -Wextra -Wconversion -Wsign-conversion)
 # silence some of the warnings enabled above

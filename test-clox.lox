@@ -161,3 +161,6 @@ class Cruller < Doughnut {
 
 Doughnut().cook();
 Cruller().cook();
+
+var nan = 0 / 0;
+print nan == nan;
